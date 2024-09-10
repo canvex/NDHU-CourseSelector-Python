@@ -11,7 +11,7 @@ def login(stdid, stdpwd):
     driver = webdriver.Chrome()
     url = "https://sys.ndhu.edu.tw/AA/CLASS/subjselect/Default.aspx"
     driver.get(url)
-    time.sleep(5)
+    time.sleep(2)
 
     username_input = driver.find_element(By.ID, "ContentPlaceHolder1_ed_StudNo")
     password_input = driver.find_element(By.ID, "ContentPlaceHolder1_ed_pass")
@@ -21,12 +21,12 @@ def login(stdid, stdpwd):
     login_button = driver.find_element(By.ID, "ContentPlaceHolder1_BtnLoginNew")
     login_button.click()
 
-    time.sleep(5)
+    time.sleep(2)
 
     try:
         alert = driver.switch_to.alert
         alert.accept()
-        time.sleep(5)
+        time.sleep(2)
     except Exception as e:
         print(f"處理 alert 時發生錯誤: {e}")
 
@@ -39,4 +39,4 @@ def login(stdid, stdpwd):
 
 
 if __name__ == "__main__":
-    login("412345678", "123456")
+    login("yourstudentid", "yourpwd")

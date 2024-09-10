@@ -7,9 +7,7 @@ import sys
 
 
 def find_courses():
-    session = courseUtils.get_session()
-    viewstate, token, myname = courseUtils.getData()
-    print(token)
+    session, viewstate, token, myname = courseUtils.getData()
     payload = {
         "__VIEWSTATE": viewstate,
         "ctl00$ContentPlaceHolder1$Button7": "查詢預排課程"
@@ -42,7 +40,7 @@ def find_courses():
         print(f"Failed to retrieve the page. Status code: {post_response.status_code}")
         sys.exit()
 
-    countdown_timer(target_time, lambda: StartSelect(token))
+    countdown_timer(target_time, lambda: StartSelect(session, token))
 
 
 if __name__ == "__main__":
