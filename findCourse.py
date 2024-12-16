@@ -1,12 +1,14 @@
 from bs4 import BeautifulSoup
 from seleCourse import StartSelect
 import courseUtils
+from datetime import datetime
 from countdown import countdown_timer
 from config import target_time, search_course_url
 import sys
 
 
 def find_courses():
+    print("開始查詢預選課表 "+str(datetime.now()))
     session, viewstate, token, myname = courseUtils.getData()
     payload = {
         "__VIEWSTATE": viewstate,
@@ -16,7 +18,8 @@ def find_courses():
     if post_response.status_code == 200:
         post_soup = BeautifulSoup(post_response.text, 'html.parser')
         # 找到選課資料的表格
-        table = post_soup.find("table", {"id": "ContentPlaceHolder1_grd_subjs"})
+        table = post_soup.find(
+            "table", {"id": "ContentPlaceHolder1_grd_subjs"})
         print(myname)
         if table:
             seen_ids = set()
@@ -37,9 +40,10 @@ def find_courses():
             print("錯誤! 未找到選課資料表格。")
             sys.exit()
     else:
-        print(f"Failed to retrieve the page. Status code: {post_response.status_code}")
+        print(
+            f"Failed to retrieve the page. Status code: {post_response.status_code}")
         sys.exit()
-
+    print("預選課表查詢完成 "+str(datetime.now()))
     countdown_timer(target_time, lambda: StartSelect(session, token))
 
 

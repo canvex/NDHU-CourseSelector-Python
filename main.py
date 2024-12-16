@@ -4,6 +4,7 @@ from loginCourse import login
 from findCourse import find_courses
 
 # 填寫登入帳號密碼
+
 stdid = input("Your Student ID: ")
 stdpwd = input("Your password: ")
 

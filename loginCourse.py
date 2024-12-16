@@ -6,19 +6,21 @@ from datetime import datetime
 
 
 def login(stdid, stdpwd):
-    print(f"現在時間: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"開始執行登入，現在時間: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
     driver = webdriver.Chrome()
     url = "https://sys.ndhu.edu.tw/AA/CLASS/subjselect/Default.aspx"
     driver.get(url)
     time.sleep(2)
 
-    username_input = driver.find_element(By.ID, "ContentPlaceHolder1_ed_StudNo")
+    username_input = driver.find_element(
+        By.ID, "ContentPlaceHolder1_ed_StudNo")
     password_input = driver.find_element(By.ID, "ContentPlaceHolder1_ed_pass")
     username_input.send_keys(stdid)
     password_input.send_keys(stdpwd)
 
-    login_button = driver.find_element(By.ID, "ContentPlaceHolder1_BtnLoginNew")
+    login_button = driver.find_element(
+        By.ID, "ContentPlaceHolder1_BtnLoginNew")
     login_button.click()
 
     time.sleep(2)
@@ -36,6 +38,7 @@ def login(stdid, stdpwd):
         pickle.dump(cookies, f)
 
     driver.quit()
+    print("cookies紀錄完成 "+str(datetime.now()))
 
 
 if __name__ == "__main__":
