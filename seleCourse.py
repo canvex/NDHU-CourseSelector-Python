@@ -7,8 +7,6 @@ from config import sele_course_url, MAX_RETRIES, RETRY_RATE, SELE_MODE
 import threading
 import sys
 
-# 設定重試次數
-
 
 # print(f"0現在時間: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
@@ -32,12 +30,13 @@ def send_selection_request(course_id, session, token):
             response_data = response.json()
             # print(response_data)
             msg = response_data.get("msg")
-            s_name = ""
-            e_name = ""
-            if SELE_MODE == 1:
-                s_name = response_data.get("subj_data")["s_name"]  # 中文課名
-                e_name = response_data.get("subj_data")["e_name"]  # 英文課名
 
+            s_name = response_data.get(
+                "subj_data", {}).get("s_name", "no_name")  # 中文課名
+            e_name = response_data.get(
+                "subj_data", {}).get("e_name", "no_name")  # 英文課名
+
+            # msg: -10衝堂 -7已經選過
             if msg == 1:
                 print(
                     f"{datetime.now()}\t {course_id}\t {s_name}\t {e_name} operation successfully.")

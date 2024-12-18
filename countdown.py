@@ -4,8 +4,8 @@ import sys
 
 
 def countdown_timer(target_time, callback):
-    # 設定提前開始搶課的時間 (1秒前)
-    start_time = target_time - timedelta(seconds=1)
+    # 設定提前開始搶課的時間 (0秒前)
+    start_time = target_time - timedelta(seconds=0)
     endDate = target_time + timedelta(days=7)
     now = datetime.now()
     total_wait_time = (start_time - now).total_seconds()
