@@ -1,7 +1,7 @@
 # config.py
 from datetime import datetime, timedelta
 
-target_time = datetime(2024, 12, 18, 12, 30, 0)
+target_time = datetime(2025, 9, 9, 12, 30, 0)
 start_time = target_time - timedelta(minutes=3)  # 提前3分鐘登入選課系統
 
 # 選課
@@ -10,7 +10,7 @@ sele_course_url = "https://sys.ndhu.edu.tw/AA/CLASS/subjselect/course_sele.ashx"
 search_course_url = "https://sys.ndhu.edu.tw/AA/CLASS/subjselect/course_sele.aspx"
 
 # 設定重試次數
-MAX_RETRIES = 50
+MAX_RETRIES = 20
 # 重試頻率(單位:秒)
 RETRY_RATE = 0.1
 

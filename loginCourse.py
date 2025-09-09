@@ -2,11 +2,16 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import pickle
 import time
-from datetime import datetime
+from selenium.webdriver.chrome.options import Options
+import logging
+logger = logging.getLogger(__name__)
 
 
 def login(stdid, stdpwd):
-    print(f"開始執行登入，現在時間: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    logger.info(f"開始執行登入")
+
+    options = Options()
+    options.add_argument("--headless")  # 如果想要隱藏瀏覽器可以開啟這個
 
     driver = webdriver.Chrome()
     url = "https://sys.ndhu.edu.tw/AA/CLASS/subjselect/Default.aspx"
@@ -30,7 +35,7 @@ def login(stdid, stdpwd):
         alert.accept()
         time.sleep(2)
     except Exception as e:
-        print(f"處理 alert 時發生錯誤: {e}")
+        logger.error(f"處理 alert 時發生錯誤: {e}")
 
     # 儲存 cookie
     cookies = driver.get_cookies()
@@ -38,7 +43,7 @@ def login(stdid, stdpwd):
         pickle.dump(cookies, f)
 
     driver.quit()
-    print("cookies紀錄完成 "+str(datetime.now()))
+    logger.info("cookies紀錄完成 ")
 
 
 if __name__ == "__main__":

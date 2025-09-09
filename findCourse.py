@@ -1,14 +1,15 @@
 from bs4 import BeautifulSoup
 from seleCourse import StartSelect
 import courseUtils
-from datetime import datetime
 from countdown import countdown_timer
 from config import target_time, search_course_url
 import sys
+import logging
+logger = logging.getLogger(__name__)
 
 
 def find_courses():
-    print("開始查詢預選課表 "+str(datetime.now()))
+    logger.info("開始查詢預選課表 ")
     session, viewstate, token, myname = courseUtils.getData()
     payload = {
         "__VIEWSTATE": viewstate,
@@ -20,11 +21,11 @@ def find_courses():
         # 找到選課資料的表格
         table = post_soup.find(
             "table", {"id": "ContentPlaceHolder1_grd_subjs"})
-        print(myname)
+        logger.info(myname)
         if table:
             seen_ids = set()
             count = 0
-            print("你的預選課程:\n")
+            logger.info("你的預選課程:\n")
             with open("courseID.txt", "w", encoding="utf-8") as file:
                 for td in table.find_all("td"):
                     a_tag = td.find("a", {"id": True})
@@ -34,16 +35,16 @@ def find_courses():
                             count += 1
                             file.write(f"{course_id}\n")
                             seen_ids.add(course_id)
-                            print(course_id)
-            print(f"\n共{count}筆課程\n")
+                            logger.info(course_id)
+            logger.info(f"\n共{count}筆課程\n")
         else:
-            print("錯誤! 未找到選課資料表格。")
+            logger.error("錯誤! 未找到選課資料表格。")
             sys.exit()
     else:
-        print(
+        logger.error(
             f"Failed to retrieve the page. Status code: {post_response.status_code}")
         sys.exit()
-    print("預選課表查詢完成 "+str(datetime.now()))
+    logger.info("預選課表查詢完成 ")
     countdown_timer(target_time, lambda: StartSelect(session, token))
 
 

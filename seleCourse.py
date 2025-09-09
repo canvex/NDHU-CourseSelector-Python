@@ -6,6 +6,8 @@ import courseUtils
 from config import sele_course_url, MAX_RETRIES, RETRY_RATE, SELE_MODE
 import threading
 import sys
+import logging
+logger = logging.getLogger(__name__)
 
 
 # print(f"0現在時間: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -36,26 +38,26 @@ def send_selection_request(course_id, session, token):
             e_name = response_data.get(
                 "subj_data", {}).get("e_name", "no_name")  # 英文課名
 
-            # msg: -10衝堂 -7已經選過
+            # msg: -10衝堂 -7已經選過 -3非選課時間 -40 超過選課上限
             if msg == 1:
-                print(
-                    f"{datetime.now()}\t {course_id}\t {s_name}\t {e_name} operation successfully.")
+                logger.info(
+                    f"{course_id}\t {s_name}\t {e_name} operation successfully.")
                 return True
             else:
-                print(
-                    f"{datetime.now()}\t {course_id}\t failed with code {msg} Retrying... ({attempt+1}/{MAX_RETRIES})")
+                logger.info(
+                    f"{course_id}\t failed with code {msg} Retrying... ({attempt+1}/{MAX_RETRIES})")
         except requests.RequestException as e:
-            print(
-                f"{datetime.now()}\t Request error for Course ID {course_id}: {e}. Retrying... ({attempt+1}/{MAX_RETRIES})")
+            logger.info(
+                f"Request error for Course ID {course_id}: {e}. Retrying... ({attempt+1}/{MAX_RETRIES})")
 
         time.sleep(RETRY_RATE)
 
-    print(f"{datetime.now()}\t Course ID {course_id} failed after {MAX_RETRIES} attempts.")
+    logger.info(f"Course ID {course_id} failed after {MAX_RETRIES} attempts.")
     return False
 
 
 def StartSelect(session, token):
-    print("開始執行選課操作 "+str(datetime.now()))
+    logger.info("開始執行選課操作 ")
     with open("courseID.txt", "r") as file:
         course_ids = file.read().splitlines()
     with concurrent.futures.ThreadPoolExecutor(max_workers=15) as executor:
@@ -67,8 +69,9 @@ def StartSelect(session, token):
             try:
                 result = future.result()
             except Exception as e:
-                print(f"An error occurred: {e}")
-    input("程式結束，請至選課系統確認! (Press Enter to leave) "+str(datetime.now()))
+                logger.error(f"An error occurred: {e}")
+    logger.info("程式結束，請至選課系統確認! (Press Enter to leave)")
+    input()  # 保留原本等待使用者按 Enter
     sys.exit(0)
 
 
