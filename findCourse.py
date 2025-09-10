@@ -36,7 +36,7 @@ def find_courses():
                             file.write(f"{course_id}\n")
                             seen_ids.add(course_id)
                             logger.info(course_id)
-            logger.info(f"\n共{count}筆課程\n")
+            logger.info(f"共 {count} 筆課程\n")
         else:
             logger.error("錯誤! 未找到選課資料表格。")
             sys.exit()

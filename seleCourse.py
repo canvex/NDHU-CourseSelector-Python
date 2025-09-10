@@ -12,6 +12,27 @@ logger = logging.getLogger(__name__)
 
 # print(f"0現在時間: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
+# 查選課人數
+search_url = "https://sys.ndhu.edu.tw/aa/class/subjselect/course_qrycounts.ashx"
+
+
+def search_count(course_id, session, token):
+    payload = {
+        "rno": course_id  # 課程 ID
+    }
+    try:
+        response = session.post(search_url, data=payload)
+        response.raise_for_status()
+
+        response_data = response.json()
+        msg = response_data.get("msg")  # 目前已選課人數
+        logger.info(f"{course_id} 目前已選課人數 {msg} 人")
+    except requests.RequestException as e:
+        logger.info(
+            f"Request error for Course ID {course_id}: {e}.")
+
+# 送出選課請求
+
 
 def send_selection_request(course_id, session, token):
 

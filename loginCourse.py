@@ -2,7 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import pickle
 import time
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.edge.options import Options
+from selenium.webdriver.edge.service import Service
 import logging
 logger = logging.getLogger(__name__)
 
@@ -13,7 +14,8 @@ def login(stdid, stdpwd):
     options = Options()
     options.add_argument("--headless")  # 如果想要隱藏瀏覽器可以開啟這個
 
-    driver = webdriver.Chrome()
+    service = Service("./msedgedriver.exe")
+    driver = webdriver.Edge(service=service)
     url = "https://sys.ndhu.edu.tw/AA/CLASS/subjselect/Default.aspx"
     driver.get(url)
     time.sleep(2)
